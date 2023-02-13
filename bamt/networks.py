@@ -437,10 +437,11 @@ class BaseNetwork(object):
                 'disc_num']]
             data[columns_names] = data.loc[:, columns_names].astype('str')
 
-#         def worker(node):
-#             return node.fit_parameters(data)
+        global worker 
+        
+        def worker(node):
+            return node.fit_parameters(data)
             
-          
         print(self.nodes)
 
         with Pool(4) as p:
