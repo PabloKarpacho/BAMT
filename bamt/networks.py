@@ -11,6 +11,7 @@ import os
 # from sklearn import preprocessing as pp
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import Pool
 from pyvis.network import Network
 from pyitlib import discrete_random_variable as drv
 from typing import Dict, Tuple, List, Callable, Optional, Type, Union, Any, Sequence
@@ -437,11 +438,19 @@ class BaseNetwork(object):
 
         def worker(node):
             return node.fit_parameters(data)
-
-        pool = ThreadPoolExecutor(3)
-        for node in self.nodes:
-            future = pool.submit(worker, node)
-            self.distributions[node.name] = future.result()
+          
+        
+        with Pool() as p:
+            future = p.map(worker, self.nodes)
+            
+        for item in future:
+          self.distributions[node.name] = future[item]
+          
+           
+#         pool = ThreadPoolExecutor(3)
+#         for node in self.nodes:
+#             future = pool.submit(worker, node)
+#             self.distributions[node.name] = future.result()
 
     def get_info(self, as_df: bool = True) -> Optional[pd.DataFrame]:
         """Return a table with name, type, parents_type, parents_names"""
