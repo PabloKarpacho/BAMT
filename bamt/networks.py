@@ -441,7 +441,7 @@ class BaseNetwork(object):
             return node.fit_parameters(data)  
           
         with concurrent.futures.ThreadPoolExecutor(max_workers=len(self.nodes)) as executor:
-            futures = {executor.submit(worker, node): for node in self.nodes}
+            futures = {executor.submit(worker, node): node for node in self.nodes}
         
         for future in concurrent.futures.as_completed(futures):
             self.distributions[futures[future]] = future.result()
