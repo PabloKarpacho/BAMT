@@ -439,12 +439,13 @@ class BaseNetwork(object):
         def worker(node):
             return node.fit_parameters(data)
           
-        
+        print(self.nodes)
         with Pool() as p:
-            future = p.map(worker, self.nodes)
+            #future = p.map(worker, self.nodes)
+            p.map(worker, self.nodes)
             
-        for item in future:
-          self.distributions[node.name] = future[item]
+#         for item in future:
+#           self.distributions[node.name] = future[item]
           
            
 #         pool = ThreadPoolExecutor(3)
