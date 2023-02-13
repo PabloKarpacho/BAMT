@@ -444,7 +444,12 @@ class BaseNetwork(object):
         print(self.nodes)
         if __name__ == '__main__':
           with Pool(4) as p:
-            p.map(worker, self.nodes)
+            future = p.map(worker, self.nodes)
+            print(future)
+        
+#         for item in self.nodes:
+#           self.distributions[item] = future.result()
+          
 
           
            
