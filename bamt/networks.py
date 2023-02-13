@@ -409,9 +409,6 @@ class BaseNetwork(object):
             weights[tuple_key] = input_dict['weights'][str(tuple_key)]
         self.weights = weights
         
-    def worker(node):
-        return node.fit_parameters(data)
-      
     def fit_parameters(self, data: pd.DataFrame, dropna: bool = True):
         """
         Base function for parameters learning
@@ -447,7 +444,7 @@ class BaseNetwork(object):
         print(self.nodes)
 
         with Pool(4) as p:
-          future = p.map(worker, self.nodes)
+          future = p.map(node.fit_parameters(data), self.nodes)
           print(future)
         
 #         for item in self.nodes:
