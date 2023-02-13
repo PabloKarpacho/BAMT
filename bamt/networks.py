@@ -445,7 +445,7 @@ class BaseNetwork(object):
         print(self.nodes)
 
         with Pool(4) as p:
-          future = p.map(node.fit_parameters(data), self.nodes)
+          future = p.map(worker, self.nodes)
           print(future)
         
 #         for item in self.nodes:
