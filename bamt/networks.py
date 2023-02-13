@@ -438,16 +438,13 @@ class BaseNetwork(object):
             data[columns_names] = data.loc[:, columns_names].astype('str')
 
         def worker(node):
-            return node.fit_parameters(data)
+            model = node.fit_parameters(data)
+            return model
           
         print(self.nodes)
-        #with Pool(multiprocessing.cpu_count() - 1) as p:
-            #future = p.map(worker, self.nodes)
-        p = multiprocessing.Pool(multiprocessing.cpu_count() - 1)
-        p.map(worker, self.nodes)
-            
-#         for item in future:
-#           self.distributions[node.name] = future[item]
+        with Pool(5) as p:
+          p.map(worker, self.nodes)
+
           
            
 #         pool = ThreadPoolExecutor(3)
