@@ -443,7 +443,8 @@ class BaseNetwork(object):
             futures = {executor.submit(worker, node): node for node in self.nodes}
         
         for future in concurrent.futures.as_completed(futures):
-            self.distributions[futures[future]] = future.result()
+            print(future)
+            self.distributions[futures[future]] = future
            
 #         pool = ThreadPoolExecutor(len(self.nodes))
 #         for node in self.nodes:
