@@ -438,8 +438,8 @@ class BaseNetwork(object):
             data[columns_names] = data.loc[:, columns_names].astype('str')
 
         def worker(node):
-            model = node.fit_parameters(data)
-            return model
+            return node.fit_parameters_node(data)
+            
           
         print(self.nodes)
         with Pool(5) as p:
