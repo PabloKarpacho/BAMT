@@ -11,6 +11,7 @@ import os
 # from sklearn import preprocessing as pp
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
+import multiprocessing
 from multiprocessing import Pool
 from pyvis.network import Network
 from pyitlib import discrete_random_variable as drv
@@ -440,9 +441,10 @@ class BaseNetwork(object):
             return node.fit_parameters(data)
           
         print(self.nodes)
-        with Pool() as p:
+        #with Pool(multiprocessing.cpu_count() - 1) as p:
             #future = p.map(worker, self.nodes)
-            p.map(worker, self.nodes)
+        p = multiprocessing.Pool(multiprocessing.cpu_count() - 1)
+        p.map(worker, self.nodes)
             
 #         for item in future:
 #           self.distributions[node.name] = future[item]
