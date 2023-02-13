@@ -450,6 +450,7 @@ class BaseNetwork(object):
         for node in self.nodes:
             future = pool.submit(worker, node)
             self.distributions[node.name] = future.result()
+            print(self.distributions)
 
     def get_info(self, as_df: bool = True) -> Optional[pd.DataFrame]:
         """Return a table with name, type, parents_type, parents_names"""
