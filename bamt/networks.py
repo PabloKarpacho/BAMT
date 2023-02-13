@@ -408,7 +408,10 @@ class BaseNetwork(object):
         for tuple_key in tuple_keys:
             weights[tuple_key] = input_dict['weights'][str(tuple_key)]
         self.weights = weights
-
+        
+    def worker(node):
+        return node.fit_parameters(data)
+      
     def fit_parameters(self, data: pd.DataFrame, dropna: bool = True):
         """
         Base function for parameters learning
@@ -437,13 +440,13 @@ class BaseNetwork(object):
                 'disc_num']]
             data[columns_names] = data.loc[:, columns_names].astype('str')
 
-        def worker(node):
-            return node.fit_parameters(data)
+#         def worker(node):
+#             return node.fit_parameters(data)
             
           
         print(self.nodes)
-        if __name__ == '__main__':
-          with Pool(4) as p:
+
+         with Pool(4) as p:
             future = p.map(worker, self.nodes)
             print(future)
         
