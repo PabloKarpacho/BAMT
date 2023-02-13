@@ -215,7 +215,7 @@ class GaussianNode(BaseNode):
         self.regressor = regressor
         self.type = 'Gaussian' + f" ({type(self.regressor).__name__})"
 
-    def fit_parameters_node(self, data: DataFrame) -> GaussianParams:
+    def fit_parameters(self, data: DataFrame) -> GaussianParams:
         parents = self.cont_parents
         print(parents, self.name)
         if parents:
