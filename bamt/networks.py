@@ -439,17 +439,17 @@ class BaseNetwork(object):
         def worker(node):
             return node.fit_parameters(data)  
           
-        with concurrent.futures.ThreadPoolExecutor(max_workers=len(self.nodes)) as executor:
-            futures = {executor.submit(worker, node): node for node in self.nodes}
-        print(futures)
-        for future in concurrent.futures.as_completed(futures):
-            print(future)
-            self.distributions[futures[future]] = (future.result())
+#         with concurrent.futures.ThreadPoolExecutor(max_workers=len(self.nodes)) as executor:
+#             futures = {executor.submit(worker, node): node for node in self.nodes}
+#         print(futures)
+#         for future in concurrent.futures.as_completed(futures):
+#             print(future)
+#             self.distributions[futures[future]] = (future.result())
            
-#         pool = ThreadPoolExecutor(len(self.nodes))
-#         for node in self.nodes:
-#             future = pool.submit(worker, node)
-#             self.distributions[node.name] = future.result()
+        pool = ThreadPoolExecutor(len(self.nodes))
+        for node in self.nodes:
+            future = pool.submit(worker, node)
+            self.distributions[node.name] = future.result()
 
     def get_info(self, as_df: bool = True) -> Optional[pd.DataFrame]:
         """Return a table with name, type, parents_type, parents_names"""
