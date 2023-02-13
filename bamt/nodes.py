@@ -217,6 +217,7 @@ class GaussianNode(BaseNode):
 
     def fit_parameters(self, data: DataFrame) -> GaussianParams:
         parents = self.cont_parents
+        print(parents, self.name)
         if parents:
             self.regressor.fit(data[parents].values, data[self.name].values)
             predicted_value = self.regressor.predict(data[parents].values)
