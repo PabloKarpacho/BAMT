@@ -11,7 +11,7 @@ import os
 # from sklearn import preprocessing as pp
 from tqdm import tqdm
 import concurrent.futures
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from pyvis.network import Network
 from pyitlib import discrete_random_variable as drv
 from typing import Dict, Tuple, List, Callable, Optional, Type, Union, Any, Sequence
@@ -439,7 +439,7 @@ class BaseNetwork(object):
         def worker(node):
             return node.fit_parameters(data)  
           
-        with concurrent.futures.ThreadPoolExecutor(max_workers = os.cpu_count()) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers = os.cpu_count()) as executor:
             futures = executor.map(worker, self.nodes)
         print(futures)
         for future in futures:
