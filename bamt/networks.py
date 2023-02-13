@@ -437,24 +437,16 @@ class BaseNetwork(object):
                 'disc_num']]
             data[columns_names] = data.loc[:, columns_names].astype('str')
 
-        global worker 
-        
         def worker(node):
-            return node.fit_parameters(data)
-            
-        print(self.nodes)
-
-        with Pool(4) as p:
-          future = p.map(worker, self.nodes)
-          print(future)
+            return node.fit_parameters(data)  
+          
+        pool = ThreadPoolExecutor(len(self.nodes))
+        futures = {pool.submit(worker, node): for node in self.nodes}
         
-#         for item in self.nodes:
-#           self.distributions[item] = future.result()
-          
-
-          
+        for future in concurrent.futures.as_completed(futures):
+            self.distributions[futures[future]] = future.result()
            
-#         pool = ThreadPoolExecutor(3)
+#         pool = ThreadPoolExecutor(len(self.nodes))
 #         for node in self.nodes:
 #             future = pool.submit(worker, node)
 #             self.distributions[node.name] = future.result()
