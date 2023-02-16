@@ -444,11 +444,10 @@ class BaseNetwork(object):
         with concurrent.futures.ThreadPoolExecutor(max_workers = os.cpu_count()) as executor:
             futures = executor.map(worker, self.nodes)
         print(futures)
-        for future in futures:
-            print(future)
-            for node in self.nodes:
-                self.distributions[node.name] = future
-
+        
+        for future, node in zip(futures, self.nodes):
+            self.distribution[node.name] = future
+            
 #         pool = ThreadPoolExecutor(len(self.nodes))
 #         future = {}
 #         for node in self.nodes:
