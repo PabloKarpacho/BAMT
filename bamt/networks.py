@@ -446,7 +446,7 @@ class BaseNetwork(object):
         print(futures)
         
         for future, node in zip(futures, self.nodes):
-            self.distribution[node.name] = future
+            self.distributions[node.name] = future
             
 #         pool = ThreadPoolExecutor(len(self.nodes))
 #         future = {}
