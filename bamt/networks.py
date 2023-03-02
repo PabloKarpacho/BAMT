@@ -7,6 +7,9 @@ import pandas as pd
 import numpy as np
 import json
 import os
+import multiprocessing
+import sys
+import uuid
 
 # from sklearn import preprocessing as pp
 from tqdm import tqdm
@@ -408,6 +411,13 @@ class BaseNetwork(object):
             weights[tuple_key] = input_dict['weights'][str(tuple_key)]
         self.weights = weights
         
+    def globalize(func):
+      def result(*args, **kwargs):
+        return func(*args, **kwargs)
+      result.__name__ = result.__qualname__ = uuid.uuid4().hex
+      setattr(sys.modules[result.__module__], result.__name__, result)
+      return result
+        
     def fit_parameters(self, data: pd.DataFrame, dropna: bool = True):
         """
         Base function for parameters learning
@@ -435,15 +445,19 @@ class BaseNetwork(object):
             columns_names = [name for name, t in self.descriptor['types'].items() if t in [
                 'disc_num']]
             data[columns_names] = data.loc[:, columns_names].astype('str')
-
+            
+        @globalize
         def worker(node):
             return node.fit_parameters(data)  
           
         print(f"self.nodes {self.nodes} type {type(self.nodes)}")
           
-        with concurrent.futures.ThreadPoolExecutor(max_workers = os.cpu_count()) as executor:
-            futures = executor.map(worker, self.nodes)
-        print(futures)
+#         with concurrent.futures.ThreadPoolExecutor(max_workers = os.cpu_count()) as executor:
+#             futures = executor.map(worker, self.nodes)
+#         print(futures)
+        
+        with multiprocessing.Pool() as pool:
+            futures = pool.map(worker, self.nodes)
         
         for future, node in zip(futures, self.nodes):
             self.distributions[node.name] = future
