@@ -70,9 +70,6 @@ class BaseNode(object):
             if type(model).__name__ == "CatBoostRegressor":
                 a = model_ser.encode('latin1')
                 
-#             if type(model).__name__ == "Fedot":
-#                 a = model_ser.encode('latin1')
-                
             else:
                 a = model_ser.replace('\"', '\'').encode('latin1')
 
