@@ -457,7 +457,7 @@ class BaseNetwork(object):
 #         print(futures)
 
         if __name__ == '__main__':
-            with multiprocessing.Pool() as pool:
+            with multiprocessing.Pool(multiprocessing.cpu_count()-1) as pool:
                 futures = pool.map(worker, self.nodes)
 
             for future, node in zip(futures, self.nodes):
