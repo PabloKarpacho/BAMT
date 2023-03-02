@@ -33,6 +33,12 @@ import bamt.nodes as Nodes
 STORAGE = config.get('NODES', 'models_storage',
                      fallback='models_storage is not defined')
 
+def globalize(func):
+  def result(*args, **kwargs):
+    return func(*args, **kwargs)
+  result.__name__ = result.__qualname__ = uuid.uuid4().hex
+  setattr(sys.modules[result.__module__], result.__name__, result)
+  return result
 
 class BaseNetwork(object):
     """
@@ -411,12 +417,6 @@ class BaseNetwork(object):
             weights[tuple_key] = input_dict['weights'][str(tuple_key)]
         self.weights = weights
         
-    def globalize(func):
-      def result(*args, **kwargs):
-        return func(*args, **kwargs)
-      result.__name__ = result.__qualname__ = uuid.uuid4().hex
-      setattr(sys.modules[result.__module__], result.__name__, result)
-      return result
         
     def fit_parameters(self, data: pd.DataFrame, dropna: bool = True):
         """
