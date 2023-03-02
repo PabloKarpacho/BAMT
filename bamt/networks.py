@@ -455,12 +455,13 @@ class BaseNetwork(object):
 #         with concurrent.futures.ThreadPoolExecutor(max_workers = os.cpu_count()) as executor:
 #             futures = executor.map(worker, self.nodes)
 #         print(futures)
-        
-        with multiprocessing.Pool() as pool:
-            futures = pool.map(worker, self.nodes)
-        
-        for future, node in zip(futures, self.nodes):
-            self.distributions[node.name] = future
+
+        if __name__ == '__main__':
+            with multiprocessing.Pool() as pool:
+                futures = pool.map(worker, self.nodes)
+
+            for future, node in zip(futures, self.nodes):
+                self.distributions[node.name] = future
             
 #         pool = ThreadPoolExecutor(len(self.nodes))
 #         future = {}
