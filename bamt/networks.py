@@ -452,17 +452,14 @@ class BaseNetwork(object):
           
         print(f"self.nodes {self.nodes} type {type(self.nodes)}")
           
-        with concurrent.futures.ThreadPoolExecutor(max_workers = os.cpu_count()) as executor:
-            futures = executor.map(worker, self.nodes)
-        print(futures)
+        with multiprocessing.Pool(multiprocessing.cpu_count()) as p:
+            results = p.map_async(worker, keys, callback=end_func)
+            print(results.get())
+            p.close()
+            p.join()
 
-#         if __name__ == '__main__':
-#             with multiprocessing.Pool(multiprocessing.cpu_count()-1) as pool:
-#                 futures = pool.map(worker, self.nodes)
-          
-        print(futures)
-        for future, node in zip(futures, self.nodes):
-            self.distributions[node.name] = future
+        for result, node in zip(results, self.nodes):
+            self.distributions[node.name] = result
             
 #         pool = ThreadPoolExecutor(len(self.nodes))
 #         future = {}
