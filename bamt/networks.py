@@ -453,8 +453,8 @@ class BaseNetwork(object):
         print(f"self.nodes {self.nodes} type {type(self.nodes)}")
           
         with multiprocessing.Pool(multiprocessing.cpu_count()) as p:
-            results = p.map_async(worker, keys, callback=end_func)
-            print(results.get())
+            results = p.map(worker, self.nodes)
+            print(results)
             p.close()
             p.join()
 
